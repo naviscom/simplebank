@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"database/sql"
-	"github.com/naviscom/simplebank/util"
+	util "github.com/naviscom/simplebank/util"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -19,7 +19,7 @@ func main() {
 	if config.Environment == "development" {
 		fmt.Println("Environment = development")
 	}
-	conn, err := sql.Open(config., config.DBSource)
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	//connPool, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		log.Println("cannot connect to db")
