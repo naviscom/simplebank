@@ -1,30 +1,53 @@
 package main
 
 import (
-	"fmt"
 	"database/sql"
-	util "github.com/naviscom/simplebank/util"
 	"log"
 
-	_ "github.com/lib/pq"
+	// "net/http"
+	"os"
+	// "time"
 
+	util "github.com/naviscom/simplebank/util"
+
+	_ "github.com/lib/pq"
 )
 
+// type application struct {
+// 	logger *log.Logger
+// //	models models.Models
+// }
+
 func main() {
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	config, err := util.LoadConfig(".")
 	if err != nil {
-		log.Println("cannot load config")
+		logger.Println("cannot load config")
 	}
-
 	if config.Environment == "development" {
-		fmt.Println("Environment = development")
+		logger.Println("Environment = development")
 	}
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
-	//connPool, err := pgxpool.New(context.Background(), config.DBSource)
+	db, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Println("cannot connect to db")
+		logger.Println("cannot connect to db")
 	}
+	logger.Println("connected to db")
+	defer db.Close()
 
-	fmt.Println("connected to db")
-	conn.Close()
+	// app := &application{
+	// 	logger: logger,
+	// 	models: models.NewModels(db),
+	// }
+	// srv := &http.Server{
+	// 	Addr:         fmt.Sprintf(":%d", config.HTTPServerPort),
+	// 	Handler:      app.routes(),
+	// 	IdleTimeout:  time.Minute,
+	// 	ReadTimeout:  10 * time.Second,
+	// 	WriteTimeout: 30 * time.Second,
+	// }
+	// logger.Println("Starting api server on port", config.HTTPServerAddress)
+	// err = srv.ListenAndServe()
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 }
